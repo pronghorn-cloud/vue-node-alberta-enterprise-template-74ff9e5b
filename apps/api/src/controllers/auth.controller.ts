@@ -34,7 +34,7 @@ export class AuthController {
    */
   async callback(req: Request, res: Response) {
     try {
-      const user = await authService.callback(req, res)
+      await authService.callback(req, res)
 
       // Redirect to frontend after successful authentication
       const redirectUrl = process.env.WEB_URL || 'http://localhost:5173'

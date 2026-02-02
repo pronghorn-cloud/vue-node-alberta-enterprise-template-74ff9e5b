@@ -44,7 +44,7 @@ const router = createRouter({
       redirect: '/'
     }
   ],
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(_to, _from, savedPosition) {
     if (savedPosition) {
       return savedPosition
     } else {
@@ -54,7 +54,7 @@ const router = createRouter({
 })
 
 // Navigation guard for authentication
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
 
   // Fetch user if not already loaded

@@ -17,13 +17,12 @@ export const generalRateLimiter = rateLimit({
   max: 100, // Limit each IP to 100 requests per windowMs
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  handler: (req, res) => {
+  handler: (_req, res) => {
     res.status(429).json({
       success: false,
       error: {
         message: 'Too many requests, please try again later',
         code: 'RATE_LIMIT_EXCEEDED',
-        retryAfter: Math.ceil(req.rateLimit.resetTime! / 1000),
       },
     })
   },
@@ -43,13 +42,12 @@ export const authRateLimiter = rateLimit({
   max: 5, // Limit each IP to 5 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
-  handler: (req, res) => {
+  handler: (_req, res) => {
     res.status(429).json({
       success: false,
       error: {
         message: 'Too many authentication attempts, please try again later',
         code: 'AUTH_RATE_LIMIT_EXCEEDED',
-        retryAfter: Math.ceil(req.rateLimit.resetTime! / 1000),
       },
     })
   },
@@ -66,13 +64,12 @@ export function createCustomRateLimiter(max: number = 100, windowMinutes: number
     max,
     standardHeaders: true,
     legacyHeaders: false,
-    handler: (req, res) => {
+    handler: (_req, res) => {
       res.status(429).json({
         success: false,
         error: {
           message: 'Too many requests, please try again later',
           code: 'RATE_LIMIT_EXCEEDED',
-          retryAfter: Math.ceil(req.rateLimit.resetTime! / 1000),
         },
       })
     },

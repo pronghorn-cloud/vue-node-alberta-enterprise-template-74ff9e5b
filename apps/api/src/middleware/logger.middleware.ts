@@ -106,7 +106,7 @@ export const devLogger = morgan(
   {
     skip: (req) => {
       // Skip logging health checks in development to reduce noise
-      return req.path === '/api/v1/health'
+      return (req as Request).path === '/api/v1/health'
     },
   }
 )
@@ -121,7 +121,7 @@ export const prodLogger = morgan(
   {
     skip: (req, res) => {
       // In production, only log errors and health checks
-      return req.path === '/api/v1/health' && res.statusCode < 400
+      return (req as Request).path === '/api/v1/health' && res.statusCode < 400
     },
   }
 )

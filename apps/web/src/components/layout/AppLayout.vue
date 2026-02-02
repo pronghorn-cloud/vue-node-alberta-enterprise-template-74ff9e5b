@@ -30,7 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import AppHeader from './AppHeader.vue'
 import AppFooter from './AppFooter.vue'
@@ -45,7 +44,7 @@ interface User {
   email?: string
 }
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     serviceName?: string
     user?: User | null

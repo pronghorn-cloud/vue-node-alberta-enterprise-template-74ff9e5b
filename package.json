@@ -13,10 +13,11 @@
     "dev": "concurrently \"npm:dev:*\"",
     "dev:api": "npm run dev --workspace=apps/api",
     "dev:web": "npm run dev --workspace=apps/web",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build:packages && npm run build:apps",
+    "build:packages": "npm run build --workspace=packages/shared --workspace=packages/config --workspace=packages/auth",
+    "build:apps": "npm run build --workspace=apps/api --workspace=apps/web",
     "build:api": "npm run build --workspace=apps/api",
     "build:web": "npm run build --workspace=apps/web",
-    "render-build": "npm install --include=dev && npm run build",
     "test": "npm run test --workspaces --if-present",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
@@ -35,8 +36,8 @@
     "docker:logs": "docker-compose logs -f",
     "migrate": "tsx scripts/migrate.ts",
     "seed": "tsx scripts/seed.ts",
-    "clean": "node -e \"const fs=require('fs');const path=require('path');const rm=p=>{try{fs.rmSync(p,{recursive:true,force:true})}catch{}};rm('node_modules');fs.readdirSync('apps').forEach(d=>rm(path.join('apps',d,'node_modules')));fs.readdirSync('packages').forEach(d=>rm(path.join('packages',d,'node_modules')));fs.readdirSync('apps').forEach(d=>rm(path.join('apps',d,'dist')));\"",
-    "clean:build": "node -e \"const fs=require('fs');const path=require('path');fs.readdirSync('apps').forEach(d=>{try{fs.rmSync(path.join('apps',d,'dist'),{recursive:true,force:true})}catch{}});\"",
+    "clean": "node -e \"const fs=require('fs');const path=require('path');const rm=p=>{try{fs.rmSync(p,{recursive:true,force:true})}catch{}};rm('node_modules');['apps','packages'].forEach(dir=>fs.readdirSync(dir).forEach(d=>{rm(path.join(dir,d,'node_modules'));rm(path.join(dir,d,'dist'))}));\"",
+    "clean:build": "node -e \"const fs=require('fs');const path=require('path');['apps','packages'].forEach(dir=>fs.readdirSync(dir).forEach(d=>{try{fs.rmSync(path.join(dir,d,'dist'),{recursive:true,force:true})}catch{}}));\"",
     "prepare": "husky install || true"
   },
   "devDependencies": {
@@ -57,8 +58,8 @@
     "vitest": "^2.1.8"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": ">=24.0.0",
+    "npm": ">=10.0.0"
   },
   "keywords": [
     "alberta-government",

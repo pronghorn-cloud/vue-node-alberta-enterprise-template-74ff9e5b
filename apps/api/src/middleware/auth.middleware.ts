@@ -68,7 +68,7 @@ export function requireRole(...roles: string[]) {
 /**
  * Optional authentication - doesn't fail if not authenticated
  */
-export function optionalAuth(req: Request, res: Response, next: NextFunction) {
+export function optionalAuth(req: Request, _res: Response, next: NextFunction) {
   const user = (req.session as any)?.user as AuthUser | undefined
 
   if (user) {

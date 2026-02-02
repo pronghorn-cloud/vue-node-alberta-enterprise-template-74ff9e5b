@@ -16,6 +16,7 @@ export interface User {
   name: string
   roles: string[]
   attributes: Record<string, any>
+  organization?: string
 }
 
 export const useAuthStore = defineStore('auth', () => {
