@@ -1,0 +1,135 @@
+/**
+ * Authentication Controller
+ *
+ * Handles HTTP requests for authentication endpoints
+ */
+
+import type { Request, Response } from 'express'
+import { authService } from '../services/auth.service.js'
+
+export class AuthController {
+  /**
+   * GET /api/v1/auth/login
+   * Initiate authentication flow
+   */
+  async login(req: Request, res: Response) {
+    try {
+      await authService.login(req, res)
+    } catch (error) {
+      console.error('Login error:', error)
+      res.status(500).json({
+        success: false,
+        error: {
+          code: 'LOGIN_ERROR',
+          message: 'Failed to initiate login',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        }
+      })
+    }
+  }
+
+  /**
+   * GET /api/v1/auth/callback
+   * Handle authentication callback from IdP
+   */
+  async callback(req: Request, res: Response) {
+    try {
+      const user = await authService.callback(req, res)
+
+      // Redirect to frontend after successful authentication
+      const redirectUrl = process.env.WEB_URL || 'http://localhost:5173'
+      res.redirect(`${redirectUrl}/profile`)
+    } catch (error) {
+      console.error('Callback error:', error)
+
+      // Redirect to login page with error
+      const redirectUrl = process.env.WEB_URL || 'http://localhost:5173'
+      res.redirect(`${redirectUrl}/login?error=auth_failed`)
+    }
+  }
+
+  /**
+   * POST /api/v1/auth/logout
+   * Logout and destroy session
+   */
+  async logout(req: Request, res: Response) {
+    try {
+      await authService.logout(req, res)
+
+      res.json({
+        success: true,
+        message: 'Logged out successfully'
+      })
+    } catch (error) {
+      console.error('Logout error:', error)
+      res.status(500).json({
+        success: false,
+        error: {
+          code: 'LOGOUT_ERROR',
+          message: 'Failed to logout',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        }
+      })
+    }
+  }
+
+  /**
+   * GET /api/v1/auth/me
+   * Get current authenticated user
+   */
+  async me(req: Request, res: Response) {
+    try {
+      const user = authService.getCurrentUser(req)
+
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          error: {
+            code: 'UNAUTHENTICATED',
+            message: 'Not authenticated'
+          }
+        })
+      }
+
+      res.json({
+        success: true,
+        data: {
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            roles: user.roles || [],
+            attributes: user.attributes || {}
+          }
+        }
+      })
+    } catch (error) {
+      console.error('Get user error:', error)
+      res.status(500).json({
+        success: false,
+        error: {
+          code: 'USER_ERROR',
+          message: 'Failed to get user information'
+        }
+      })
+    }
+  }
+
+  /**
+   * GET /api/v1/auth/status
+   * Check authentication status
+   */
+  async status(req: Request, res: Response) {
+    const user = authService.getCurrentUser(req)
+
+    res.json({
+      success: true,
+      data: {
+        authenticated: !!user,
+        driver: authService.getDriver().getDriverName()
+      }
+    })
+  }
+}
+
+export const authController = new AuthController()

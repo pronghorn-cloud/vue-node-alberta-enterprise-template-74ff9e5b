@@ -1,0 +1,45 @@
+{
+  "name": "@template/api",
+  "version": "1.0.0",
+  "description": "Express API for Alberta Government enterprise template",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --import tsx --watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@template/auth": "*",
+    "@template/config": "*",
+    "@template/shared": "*",
+    "connect-pg-simple": "^10.0.0",
+    "cors": "^2.8.6",
+    "csrf": "^3.1.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.19.0",
+    "find-up": "^7.0.0",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.1",
+    "pg": "^8.17.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/express-session": "^1.18.1",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.10.5",
+    "@types/pg": "^8.16.0",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.2.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}
