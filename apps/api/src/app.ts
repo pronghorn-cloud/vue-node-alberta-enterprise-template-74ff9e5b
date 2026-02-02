@@ -209,7 +209,8 @@ export function createApp(): Express {
     app.use(express.static(webDistPath))
 
     // SPA fallback - serve index.html for all non-API routes
-    app.get('*', (req: Request, res: Response, next: NextFunction) => {
+    // Note: Express 5 requires named wildcard parameters
+    app.get('/{*splat}', (req: Request, res: Response, next: NextFunction) => {
       // Skip API routes
       if (req.path.startsWith('/api/')) {
         return next()

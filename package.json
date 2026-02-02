@@ -38,7 +38,7 @@
     "migrate": "tsx scripts/migrate.ts",
     "seed": "tsx scripts/seed.ts",
     "clean": "node -e \"const fs=require('fs');const path=require('path');const rm=p=>{try{fs.rmSync(p,{recursive:true,force:true})}catch{}};rm('node_modules');['apps','packages'].forEach(dir=>fs.readdirSync(dir).forEach(d=>{rm(path.join(dir,d,'node_modules'));rm(path.join(dir,d,'dist'))}));\"",
-    "clean:build": "node -e \"const fs=require('fs');const path=require('path');['apps','packages'].forEach(dir=>fs.readdirSync(dir).forEach(d=>{try{fs.rmSync(path.join(dir,d,'dist'),{recursive:true,force:true})}catch{}}));\"",
+    "clean:build": "node -e \"const fs=require('fs');const path=require('path');['apps','packages'].forEach(dir=>fs.readdirSync(dir).forEach(d=>{const base=path.join(dir,d);try{fs.rmSync(path.join(base,'dist'),{recursive:true,force:true});fs.rmSync(path.join(base,'tsconfig.tsbuildinfo'),{force:true})}catch{}}));\"",
     "prepare": "husky install || true"
   },
   "devDependencies": {
