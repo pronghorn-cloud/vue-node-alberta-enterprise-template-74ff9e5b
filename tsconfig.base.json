@@ -28,9 +28,9 @@
     "sourceMap": true,
 
     "paths": {
-      "@template/shared": ["./packages/shared/src"],
-      "@template/config": ["./packages/config/src"],
-      "@template/auth": ["./packages/auth/src"]
+      "@template/shared": ["./packages/shared/dist"],
+      "@template/config": ["./packages/config/dist"],
+      "@template/auth": ["./packages/auth/dist"]
     }
   },
   "exclude": [
