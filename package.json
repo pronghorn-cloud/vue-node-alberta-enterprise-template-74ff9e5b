@@ -13,6 +13,7 @@
     "dev": "concurrently \"npm:dev:*\"",
     "dev:api": "npm run dev --workspace=apps/api",
     "dev:web": "npm run dev --workspace=apps/web",
+    "start": "npm run start --workspace=apps/api",
     "build": "npm run build:packages && npm run build:apps",
     "build:packages": "npm run build --workspace=packages/shared --workspace=packages/config --workspace=packages/auth",
     "build:apps": "npm run build --workspace=apps/api --workspace=apps/web",

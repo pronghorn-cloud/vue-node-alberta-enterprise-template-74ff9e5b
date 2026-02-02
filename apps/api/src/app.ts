@@ -3,12 +3,17 @@ import session from 'express-session'
 import connectPgSimple from 'connect-pg-simple'
 import cors from 'cors'
 import helmet from 'helmet'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import authRoutes from './routes/auth.routes.js'
 import { generalRateLimiter, createCustomRateLimiter } from './middleware/rate-limit.middleware.js'
 import { csrfProtection, csrfTokenEndpoint } from './middleware/csrf.middleware.js'
 import { devLogger, prodLogger, logError } from './middleware/logger.middleware.js'
 import { createDatabasePool } from './config/database.config.js'
 import { setupDbMetrics, checkDatabaseHealth, getPoolHealth } from './middleware/db-metrics.middleware.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const PgSession = connectPgSimple(session)
 
