@@ -25,13 +25,7 @@
 
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
-
-    "paths": {
-      "@template/shared": ["./packages/shared/dist"],
-      "@template/config": ["./packages/config/dist"],
-      "@template/auth": ["./packages/auth/dist"]
-    }
+    "sourceMap": true
   },
   "exclude": [
     "node_modules",
