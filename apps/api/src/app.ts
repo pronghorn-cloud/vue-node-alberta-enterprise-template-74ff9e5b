@@ -12,9 +12,6 @@ import { devLogger, prodLogger, logError } from './middleware/logger.middleware.
 import { createDatabasePool } from './config/database.config.js'
 import { setupDbMetrics, checkDatabaseHealth, getPoolHealth } from './middleware/db-metrics.middleware.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
 const PgSession = connectPgSimple(session)
 
 export function createApp(): Express {
@@ -203,7 +200,25 @@ export function createApp(): Express {
   // Auth routes
   app.use('/api/v1/auth', authRoutes)
 
-  // 404 handler
+  // Serve static files in production
+  if (process.env.NODE_ENV === 'production') {
+    const currentDir = path.dirname(fileURLToPath(import.meta.url))
+    const webDistPath = path.resolve(currentDir, '../../web/dist')
+
+    // Serve static assets
+    app.use(express.static(webDistPath))
+
+    // SPA fallback - serve index.html for all non-API routes
+    app.get('*', (req: Request, res: Response, next: NextFunction) => {
+      // Skip API routes
+      if (req.path.startsWith('/api/')) {
+        return next()
+      }
+      res.sendFile(path.join(webDistPath, 'index.html'))
+    })
+  }
+
+  // 404 handler (for API routes only in production)
   app.use((_req: Request, res: Response) => {
     res.status(404).json({
       success: false,
